@@ -1,4 +1,4 @@
-package src.sistemahospital.Vistas;
+package Vistas; 
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,22 +6,21 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Vista del módulo ORDENAMIENTO. El contenido de cada opción queda PENDIENTE
- * para que el compañero encargado implemente la lógica (Burbuja, Selección,
- * Inserción, Quicksort).
+ * Vista del módulo BÚSQUEDA. El contenido de cada opción queda PENDIENTE para
+ * que el compañero encargado implemente la lógica (Binaria, Secuencial).
  *
  * @author CRACKS
  */
-public class VistaOrdenamiento extends VistaModulo {
+public class VistaBusqueda extends VistaModulo {
 
-    public VistaOrdenamiento(String usuario) {
-        super(usuario, "Ordenamiento", new Color(46, 204, 113));
+    public VistaBusqueda(String usuario) {
+        super(usuario, "Búsqueda", new Color(230, 126, 34));
         initModulo();
     }
 
     @Override
     protected List<String> getOpcionesMenu() {
-        return Arrays.asList("Método Burbuja", "Método Selección", "Método Inserción", "Método Quicksort");
+        return Arrays.asList("Búsqueda Binaria", "Búsqueda Secuencial");
     }
 
     @Override
@@ -40,7 +39,7 @@ public class VistaOrdenamiento extends VistaModulo {
 
         p.add(crearTitulo(nombreOpcion));
         p.add(Box.createRigidArea(new Dimension(0, 6)));
-        p.add(crearSubtitulo("Aquí irá la lógica del módulo Ordenamiento → " + nombreOpcion));
+        p.add(crearSubtitulo("Aquí irá la lógica del módulo Búsqueda → " + nombreOpcion));
         p.add(Box.createVerticalGlue());
         return p;
     }

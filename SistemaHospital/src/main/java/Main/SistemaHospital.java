@@ -1,8 +1,8 @@
-package src.sistemahospital;
+package Main;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import src.sistemahospital.Vistas.InicioSistema;
+import Vistas.InicioSistema;  // ✅ ruta nueva
 
 /**
  *
