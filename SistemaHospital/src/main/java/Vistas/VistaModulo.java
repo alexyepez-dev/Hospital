@@ -1,4 +1,4 @@
-package Vistas;   // ← ANTES era "package src.sistemahospital.Vistas;"
+package Vistas;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
