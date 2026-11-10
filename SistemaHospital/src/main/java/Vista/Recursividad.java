@@ -5,11 +5,13 @@
 package Vista;
 
 /**
+ * Vista de Recursividad. El diseño (menú lateral con Guardias de doctores,
+ * Banco de sangre y Salir) está en PanelRecursividad.java.
  *
  * @author ASUS
  */
 public class Recursividad extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Recursividad.class.getName());
 
     /**
@@ -17,6 +19,20 @@ public class Recursividad extends javax.swing.JFrame {
      */
     public Recursividad() {
         initComponents();
+        // Se usan nombres completos (sin imports) para que NetBeans no pueda borrarlos.
+        setTitle("Sistema Hospital · Recursividad");
+        setContentPane(new PanelRecursividad(this::salir));
+        setMinimumSize(new java.awt.Dimension(1240, 740));
+        setSize(1340, 820);
+        setLocationRelativeTo(null);
+    }
+
+    /** Botón Salir: vuelve al menú principal y cierra esta ventana. */
+    private void salir() {
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.setLocationRelativeTo(this);
+        menu.setVisible(true);
+        dispose();
     }
 
     /**
@@ -51,7 +67,7 @@ public class Recursividad extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
