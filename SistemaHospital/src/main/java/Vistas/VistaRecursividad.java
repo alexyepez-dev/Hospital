@@ -1,4 +1,4 @@
-package Vistas; 
+package Vistas;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -6,12 +6,16 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+import Logica.RecursividadLogica;
+import Models.RecursividadModel;
+
 /**
- * Vista del módulo RECURSIVIDAD Opciones: Factorial, Fibonacci
- *
+ * Vista del módulo RECURSIVIDAD.
  * @author CRACKS
  */
 public class VistaRecursividad extends VistaModulo {
+
+    private final RecursividadLogica logica = new RecursividadLogica();
 
     public VistaRecursividad(String usuario) {
         super(usuario, "Recursividad", new Color(155, 89, 182));
@@ -58,38 +62,18 @@ public class VistaRecursividad extends VistaModulo {
         btn.addActionListener(e -> {
             try {
                 int n = Integer.parseInt(txt.getText().trim());
-                if (n < 0 || n > 20) {
+                RecursividadModel r = logica.calcularFactorial(n);
+                if (r == null) {
                     resultado.setText("⚠ Ingresa un número entre 0 y 20");
-                    return;
+                } else {
+                    resultado.setText(r.getTraza());
                 }
-                StringBuilder sb = new StringBuilder();
-                sb.append("Calculando factorial(").append(n).append(")\n\n");
-                sb.append(trazaFactorial(n, 0));
-                sb.append("\n\nResultado: ").append(n).append("! = ").append(factorial(n));
-                resultado.setText(sb.toString());
             } catch (NumberFormatException ex) {
                 resultado.setText("⚠ Ingresa un número válido");
             }
         });
 
         return p;
-    }
-
-    private long factorial(int n) {
-        return (n <= 1) ? 1 : n * factorial(n - 1);
-    }
-
-    private String trazaFactorial(int n, int nivel) {
-        String prefijo = "  ".repeat(nivel);
-        if (n <= 1) {
-            return prefijo + "f(" + n + ") = 1 (caso base)\n";
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append(prefijo).append("f(").append(n).append(") = ")
-                .append(n).append(" × f(").append(n - 1).append(")\n");
-        sb.append(trazaFactorial(n - 1, nivel + 1));
-        sb.append(prefijo).append("f(").append(n).append(") = ").append(factorial(n)).append("\n");
-        return sb.toString();
     }
 
     private JPanel panelFibonacci() {
@@ -122,28 +106,17 @@ public class VistaRecursividad extends VistaModulo {
         btn.addActionListener(e -> {
             try {
                 int n = Integer.parseInt(txt.getText().trim());
-                if (n < 0 || n > 30) {
+                RecursividadModel r = logica.calcularFibonacci(n);
+                if (r == null) {
                     resultado.setText("⚠ Ingresa un número entre 0 y 30");
-                    return;
+                } else {
+                    resultado.setText(r.getTraza());
                 }
-                StringBuilder sb = new StringBuilder();
-                sb.append("Serie de Fibonacci hasta n=").append(n).append(":\n\n");
-                for (int i = 0; i <= n; i++) {
-                    sb.append("f(").append(i).append(") = ").append(fibonacci(i)).append("\n");
-                }
-                resultado.setText(sb.toString());
             } catch (NumberFormatException ex) {
                 resultado.setText("⚠ Ingresa un número válido");
             }
         });
 
         return p;
-    }
-
-    private long fibonacci(int n) {
-        if (n <= 1) {
-            return n;
-        }
-        return fibonacci(n - 1) + fibonacci(n - 2);
     }
 }
