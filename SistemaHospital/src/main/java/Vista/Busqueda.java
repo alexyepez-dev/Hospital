@@ -17,6 +17,18 @@ public class Busqueda extends javax.swing.JFrame {
      */
     public Busqueda() {
         initComponents();
+        // Se usan nombres completos (sin imports) para que NetBeans no pueda borrarlos.
+        setTitle("Sistema Hospitalario · Búsqueda Clínica");
+        setContentPane(new PanelBusqueda(this::salir));
+        Componentes.Estilo.ajustarAPantalla(this, 1400, 860, 1150, 700);
+    }
+
+    /** Botón Salir: vuelve al menú principal y cierra esta ventana. */
+    private void salir() {
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.setLocationRelativeTo(this);
+        menu.setVisible(true);
+        dispose();
     }
 
     /**

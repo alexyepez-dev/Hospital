@@ -33,11 +33,16 @@ public class MenuLateral extends JPanel {
     private final List<ItemMenu> items = new ArrayList<>();
 
     public MenuLateral(String titulo) {
+        this(titulo, 250);
+    }
+
+    /** @param ancho ancho del menú en px (más ancho si las descripciones de las opciones son largas) */
+    public MenuLateral(String titulo, int ancho) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(250, 0));
+        setPreferredSize(new Dimension(ancho, 0));
         setBorder(BorderFactory.createEmptyBorder(28, 16, 32, 16));
 
-        JLabel sistema = Estilo.etiqueta("SISTEMA HOSPITAL", 11, Font.BOLD, new Color(255, 255, 255, 190));
+        JLabel sistema = Estilo.etiqueta("SISTEMA HOSPITALARIO", 11, Font.BOLD, new Color(255, 255, 255, 190));
         sistema.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 0));
         JLabel lblTitulo = Estilo.etiqueta(titulo, 22, Font.BOLD, Color.WHITE);
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(2, 8, 0, 0));
