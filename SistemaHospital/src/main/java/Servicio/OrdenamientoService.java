@@ -144,19 +144,6 @@ public final class OrdenamientoService {
         r.ordenado(j);
     }
 
-    /** Ejecuta los 4 algoritmos sobre los mismos datos (sin registrar pasos) para compararlos. */
-    public List<Resultado> compararTodos(List<Paciente> datos, Criterio criterio) {
-        List<Resultado> resultados = new ArrayList<>();
-        for (Algoritmo a : Algoritmo.values()) {
-            List<Paciente> lista = new ArrayList<>(datos);
-            Registro registro = new Registro(false);
-            ejecutar(a, lista, criterio.comparador, registro);
-            resultados.add(new Resultado(a, Collections.unmodifiableList(lista), List.of(),
-                    registro.comparaciones, registro.intercambios, medir(datos, a, criterio)));
-        }
-        return resultados;
-    }
-
     /** Mejor de varias corridas: la primera paga el arranque de la JVM y falsea el tiempo. */
     private long medir(List<Paciente> datos, Algoritmo algoritmo, Criterio criterio) {
         long mejor = Long.MAX_VALUE;

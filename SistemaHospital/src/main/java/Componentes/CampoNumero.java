@@ -112,10 +112,6 @@ public class CampoNumero extends JPanel {
         return ((Number) modelo.getValue()).intValue();
     }
 
-    public void setValor(int valor) {
-        modelo.setValue(valor);
-    }
-
     public void addChangeListener(ChangeListener l) {
         modelo.addChangeListener(l);
     }

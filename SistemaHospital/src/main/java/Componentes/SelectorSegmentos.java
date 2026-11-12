@@ -72,16 +72,6 @@ public class SelectorSegmentos extends javax.swing.JComponent {
         this(18, false, opciones);
     }
 
-    public void agregarOpcion(String opcion) {
-        opciones.add(opcion);
-        revalidate();
-        repaint();
-    }
-
-    public int getCantidad() {
-        return opciones.size();
-    }
-
     public int getSeleccion() {
         return seleccion;
     }

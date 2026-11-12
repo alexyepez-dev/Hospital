@@ -7,7 +7,6 @@ import Componentes.CampoNumero;
 import Componentes.CampoTexto;
 import Componentes.ItemMenu;
 import Componentes.MenuLateral;
-import Componentes.PanelPestanas;
 import Componentes.PanelRedondeado;
 import Componentes.ScrollModerno;
 import Componentes.SelectorSegmentos;
@@ -350,7 +349,7 @@ public class PanelOrdenamiento extends JPanel {
         norte.add(franja, BorderLayout.SOUTH);
         t.add(norte, BorderLayout.NORTH);
 
-        t.add(PanelPestanas.marco(ScrollModerno.envolver(tabla)), BorderLayout.CENTER);
+        t.add(marco(ScrollModerno.envolver(tabla)), BorderLayout.CENTER);
 
         // Bitácora clínica
         bitacora.setEditable(false);
@@ -362,7 +361,7 @@ public class PanelOrdenamiento extends JPanel {
         JPanel zonaBitacora = new JPanel(new BorderLayout(0, 6));
         zonaBitacora.setOpaque(false);
         zonaBitacora.add(seccion("BITÁCORA CLÍNICA"), BorderLayout.NORTH);
-        JComponent marcoBitacora = PanelPestanas.marco(ScrollModerno.envolver(bitacora));
+        JComponent marcoBitacora = marco(ScrollModerno.envolver(bitacora));
         marcoBitacora.setPreferredSize(new Dimension(10, 74));
         zonaBitacora.add(marcoBitacora, BorderLayout.CENTER);
         t.add(zonaBitacora, BorderLayout.SOUTH);

@@ -102,21 +102,14 @@ public final class Estilo {
     }
 
     /**
-     * Tarjeta de resultado:  TÍTULO ............ [icono]
+     * Tarjeta de resultado:  TÍTULO
      *                        valor grande
      *                        texto secundario
      */
-    public static PanelRedondeado tarjetaDato(String titulo, String icono, JComponent valor, JComponent sub) {
+    public static PanelRedondeado tarjetaDato(String titulo, JComponent valor, JComponent sub) {
         PanelRedondeado t = tarjeta();
         t.setLayout(new BorderLayout(0, 4));
-        JPanel cab = new JPanel(new BorderLayout());
-        cab.setOpaque(false);
-        JLabel lt = etiqueta(titulo, 11, Font.BOLD, TEXTO_SEC);
-        cab.add(lt, BorderLayout.WEST);
-        if (icono != null) {
-            cab.add(Insignia.icono(icono), BorderLayout.EAST);
-        }
-        t.add(cab, BorderLayout.NORTH);
+        t.add(etiqueta(titulo, 11, Font.BOLD, TEXTO_SEC), BorderLayout.NORTH);
 
         JPanel cuerpo = new JPanel();
         cuerpo.setOpaque(false);
@@ -152,17 +145,52 @@ public final class Estilo {
         return b;
     }
 
-    public static JComponent separador() {
-        JComponent linea = new JComponent() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                g.setColor(BORDE);
-                g.fillRect(0, 0, getWidth(), 1);
-            }
-        };
-        linea.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-        linea.setPreferredSize(new Dimension(10, 1));
-        return linea;
+    /** Envuelve un contenido (tabla, lista) con un borde fino redondeado. */
+    public static JComponent marco(JComponent c) {
+        PanelRedondeado m = new PanelRedondeado();
+        m.setRadio(10);
+        m.setBackground(Color.WHITE);
+        m.setColorBorde(BORDE);
+        m.setLayout(new BorderLayout());
+        m.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        m.add(c, BorderLayout.CENTER);
+        return m;
+    }
+
+    /** Franja de aviso con fondo de color suave; el color se puede cambiar con setBackground. */
+    public static PanelRedondeado franja(JLabel texto) {
+        PanelRedondeado f = new PanelRedondeado();
+        f.setBackground(AZUL_SUAVE);
+        f.setRadio(10);
+        f.setLayout(new BorderLayout());
+        f.setBorder(BorderFactory.createEmptyBorder(9, 14, 9, 14));
+        f.add(texto, BorderLayout.CENTER);
+        return f;
+    }
+
+    /**
+     * Tarjeta con título (y descripción opcional) arriba, una franja de aviso y
+     * una tabla con scroll ocupando el resto.
+     */
+    public static PanelRedondeado tarjetaTabla(String titulo, JLabel descripcion, JComponent franja, JComponent tabla) {
+        PanelRedondeado t = tarjeta();
+        t.setLayout(new BorderLayout(0, 10));
+        JPanel cab = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        cab.setOpaque(false);
+        cab.add(etiqueta(titulo, 16, Font.BOLD, TEXTO));
+        if (descripcion != null) {
+            cab.add(Box.createHorizontalStrut(10));
+            cab.add(descripcion);
+        }
+        JPanel norte = new JPanel(new BorderLayout(0, 10));
+        norte.setOpaque(false);
+        norte.add(cab, BorderLayout.NORTH);
+        if (franja != null) {
+            norte.add(franja, BorderLayout.SOUTH);
+        }
+        t.add(norte, BorderLayout.NORTH);
+        t.add(marco(ScrollModerno.envolver(tabla)), BorderLayout.CENTER);
+        return t;
     }
 
     /** Fila horizontal de leyendas (punto de color + texto). */
