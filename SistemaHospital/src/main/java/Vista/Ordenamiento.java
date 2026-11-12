@@ -5,11 +5,14 @@
 package Vista;
 
 /**
+ * Vista de Ordenamiento. El diseño (menú lateral con los 4 algoritmos, tabla
+ * animada y comparación) está en PanelOrdenamiento.java y la lógica en
+ * Servicio/OrdenamientoService.java.
  *
  * @author ASUS
  */
 public class Ordenamiento extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Ordenamiento.class.getName());
 
     /**
@@ -17,6 +20,18 @@ public class Ordenamiento extends javax.swing.JFrame {
      */
     public Ordenamiento() {
         initComponents();
+        // Se usan nombres completos (sin imports) para que NetBeans no pueda borrarlos.
+        setTitle("Sistema Hospital · Ordenamiento");
+        setContentPane(new PanelOrdenamiento(this::salir));
+        Componentes.Estilo.ajustarAPantalla(this, 1400, 860, 1150, 700);
+    }
+
+    /** Botón Salir: vuelve al menú principal y cierra esta ventana. */
+    private void salir() {
+        MenuPrincipal menu = new MenuPrincipal();
+        menu.setLocationRelativeTo(this);
+        menu.setVisible(true);
+        dispose();
     }
 
     /**
