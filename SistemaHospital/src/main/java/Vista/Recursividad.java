@@ -22,9 +22,7 @@ public class Recursividad extends javax.swing.JFrame {
         // Se usan nombres completos (sin imports) para que NetBeans no pueda borrarlos.
         setTitle("Sistema Hospital · Recursividad");
         setContentPane(new PanelRecursividad(this::salir));
-        setMinimumSize(new java.awt.Dimension(1240, 740));
-        setSize(1340, 820);
-        setLocationRelativeTo(null);
+        Componentes.Estilo.ajustarAPantalla(this, 1340, 820, 1150, 700);
     }
 
     /** Botón Salir: vuelve al menú principal y cierra esta ventana. */

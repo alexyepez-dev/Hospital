@@ -4,24 +4,23 @@ import static Componentes.Estilo.*;
 
 import Componentes.ArbolLlamadas;
 import Componentes.BotonRedondeado;
+import Componentes.CampoNumero;
+import Componentes.PanelPestanas;
 import Componentes.PanelRedondeado;
+import Componentes.ScrollModerno;
 import Componentes.Semaforo;
+import Componentes.VisorCodigo;
 import Model.DemandaSangre;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
 /**
  * Banco de sangre (Fibonacci recursivo): la demanda de una semana es la suma de
@@ -29,84 +28,95 @@ import javax.swing.SpinnerNumberModel;
  */
 public class PanelBancoSangre extends JPanel {
 
-    private final JSpinner spSemana;
-    private final JSpinner spStock;
-    private final JLabel lblUnidades = etiqueta("-", 38, Font.BOLD, AZUL_OSCURO);
+    private static final String CODIGO = """
+            // Model/DemandaSangre.java  (versión simplificada, sin el árbol)
+            public static long fibonacci(int semana) {
+                if (semana == 1) {               // caso base: semana 1
+                    return 10;
+                }
+                if (semana == 2) {               // caso base: semana 2
+                    return 15;
+                }
+                // demanda = semana anterior + semana antepasada
+                return fibonacci(semana - 1) + fibonacci(semana - 2);
+            }""";
+
+    private final CampoNumero campoSemana = new CampoNumero(7, DemandaSangre.SEMANA_MINIMA, DemandaSangre.SEMANA_MAXIMA, 1);
+    private final CampoNumero campoStock = new CampoNumero(200, 0, 100_000, 10);
+    private final JLabel lblUnidades = etiqueta("-", 36, Font.BOLD, AZUL_OSCURO);
     private final JLabel lblUnidadesSub = etiqueta(" ", 12, Font.PLAIN, TEXTO_SEC);
     private final Semaforo semaforo = new Semaforo();
-    private final JLabel lblSemaforoTitulo = etiqueta("-", 17, Font.BOLD, TEXTO);
+    private final JLabel lblSemaforoTitulo = etiqueta("-", 16, Font.BOLD, TEXTO);
     private final JLabel lblSemaforoDetalle = etiqueta(" ", 12, Font.PLAIN, TEXTO_SEC);
-    private final JLabel lblLlamadas = etiqueta("-", 38, Font.BOLD, AZUL_OSCURO);
+    private final JLabel lblLlamadas = etiqueta("-", 36, Font.BOLD, AZUL_OSCURO);
     private final JLabel lblLlamadasSub = etiqueta(" ", 12, Font.PLAIN, TEXTO_SEC);
-    private final JLabel lblFormula = etiqueta(" ", 12, Font.PLAIN, TEXTO_SEC);
     private final ArbolLlamadas arbol = new ArbolLlamadas();
+    private PanelPestanas pestanas;
 
     public PanelBancoSangre() {
-        super(new BorderLayout(0, 20));
+        super(new BorderLayout(0, 16));
         setOpaque(false);
-        spSemana = spinner(new SpinnerNumberModel(7, DemandaSangre.SEMANA_MINIMA, DemandaSangre.SEMANA_MAXIMA, 1));
-        spStock = spinner(new SpinnerNumberModel(200, 0, 100_000, 10));
 
-        add(encabezado("Banco de sangre",
+        add(encabezado("FIBONACCI  ·  RECURSIÓN DOBLE", "Banco de sangre",
                 "La demanda de cada semana es la suma de la demanda cubierta en las dos semanas previas"
-                + "   ·   D(n) = D(n-1) + D(n-2)  (Fibonacci)"),
+                + "   ·   D(n) = D(n-1) + D(n-2)"),
                 BorderLayout.NORTH);
 
-        JPanel cuerpo = new JPanel(new BorderLayout(18, 18));
+        JPanel cuerpo = new JPanel(new BorderLayout(SEPARACION, SEPARACION));
         cuerpo.setOpaque(false);
         cuerpo.add(crearPanelEntrada(), BorderLayout.WEST);
 
-        JPanel centro = new JPanel(new BorderLayout(0, 18));
+        JPanel centro = new JPanel(new BorderLayout(0, SEPARACION));
         centro.setOpaque(false);
         centro.add(crearFilaResultados(), BorderLayout.NORTH);
-        centro.add(crearPanelArbol(), BorderLayout.CENTER);
+        centro.add(crearPestanas(), BorderLayout.CENTER);
         cuerpo.add(centro, BorderLayout.CENTER);
         add(cuerpo, BorderLayout.CENTER);
 
         // Recalcula en vivo al cambiar cualquier valor
-        spSemana.addChangeListener(e -> calcular());
-        spStock.addChangeListener(e -> calcular());
+        campoSemana.addChangeListener(e -> calcular());
+        campoStock.addChangeListener(e -> calcular());
         calcular();
     }
 
     private JComponent crearPanelEntrada() {
         PanelRedondeado t = tarjeta();
         t.setLayout(new BoxLayout(t, BoxLayout.Y_AXIS));
-        t.setPreferredSize(new Dimension(280, 0));
+        t.setPreferredSize(new Dimension(292, 0));
 
-        t.add(izq(etiqueta("DATOS DE ENTRADA", 11, Font.BOLD, AZUL)));
+        t.add(seccion("DATOS DE ENTRADA"));
         t.add(Box.createVerticalStrut(14));
         t.add(izq(etiqueta("Semana de campaña proyectada", 13, Font.BOLD, TEXTO)));
         t.add(Box.createVerticalStrut(6));
-        t.add(izq(spSemana));
-        t.add(Box.createVerticalStrut(4));
+        t.add(izq(campoSemana));
+        t.add(Box.createVerticalStrut(5));
         t.add(izq(etiqueta("Entre " + DemandaSangre.SEMANA_MINIMA + " y " + DemandaSangre.SEMANA_MAXIMA,
                 11, Font.PLAIN, TEXTO_SEC)));
-        t.add(Box.createVerticalStrut(16));
+        t.add(Box.createVerticalStrut(14));
 
         t.add(izq(etiqueta("Stock actual en el banco", 13, Font.BOLD, TEXTO)));
         t.add(Box.createVerticalStrut(6));
-        t.add(izq(spStock));
-        t.add(Box.createVerticalStrut(4));
-        t.add(izq(etiqueta("Unidades disponibles", 11, Font.PLAIN, TEXTO_SEC)));
-        t.add(Box.createVerticalStrut(20));
+        t.add(izq(campoStock));
+        t.add(Box.createVerticalStrut(5));
+        t.add(izq(etiqueta("Unidades disponibles (de 10 en 10)", 11, Font.PLAIN, TEXTO_SEC)));
+        t.add(Box.createVerticalStrut(18));
 
         BotonRedondeado btn = boton("Calcular proyección");
         btn.addActionListener(e -> calcular());
         t.add(izq(btn));
 
-        t.add(Box.createVerticalStrut(22));
+        t.add(Box.createVerticalStrut(20));
         t.add(izq(separador()));
-        t.add(Box.createVerticalStrut(18));
+        t.add(Box.createVerticalStrut(16));
 
-        t.add(izq(etiqueta("CASOS BASE", 11, Font.BOLD, AZUL)));
+        t.add(seccion("CASOS BASE"));
         t.add(Box.createVerticalStrut(8));
         t.add(izq(etiqueta("Semana 1:  " + DemandaSangre.DEMANDA_SEMANA_1 + " unidades", 12, Font.PLAIN, TEXTO)));
         t.add(Box.createVerticalStrut(4));
         t.add(izq(etiqueta("Semana 2:  " + DemandaSangre.DEMANDA_SEMANA_2 + " unidades", 12, Font.PLAIN, TEXTO)));
 
-        t.add(Box.createVerticalStrut(18));
-        t.add(izq(etiqueta("SEMÁFORO DE RESERVA", 11, Font.BOLD, AZUL)));
+        t.add(Box.createVerticalStrut(16));
+        t.add(seccion("SEMÁFORO DE RESERVA"));
         t.add(Box.createVerticalStrut(8));
         t.add(izq(leyenda(Semaforo.VERDE, "Stock ≥ requerido + " + DemandaSangre.RESERVA_PORCENTAJE + " %")));
         t.add(Box.createVerticalStrut(6));
@@ -118,72 +128,45 @@ public class PanelBancoSangre extends JPanel {
     }
 
     private JComponent crearFilaResultados() {
-        JPanel fila = new JPanel(new GridLayout(1, 3, 18, 0));
+        JPanel fila = new JPanel(new GridLayout(1, 3, SEPARACION, 0));
         fila.setOpaque(false);
 
-        PanelRedondeado cUnidades = tarjeta();
-        cUnidades.setLayout(new BoxLayout(cUnidades, BoxLayout.Y_AXIS));
-        cUnidades.add(izq(etiqueta("UNIDADES REQUERIDAS", 11, Font.BOLD, TEXTO_SEC)));
-        cUnidades.add(Box.createVerticalStrut(6));
-        cUnidades.add(izq(lblUnidades));
-        cUnidades.add(izq(lblUnidadesSub));
-        fila.add(cUnidades);
+        fila.add(tarjetaDato("UNIDADES REQUERIDAS", "u", alto(lblUnidades), lblUnidadesSub));
 
-        PanelRedondeado cSemaforo = tarjeta();
-        cSemaforo.setLayout(new BoxLayout(cSemaforo, BoxLayout.Y_AXIS));
-        cSemaforo.add(izq(etiqueta("SEMÁFORO DE STOCK", 11, Font.BOLD, TEXTO_SEC)));
-        cSemaforo.add(Box.createVerticalStrut(8));
+        JPanel estado = new JPanel();
+        estado.setOpaque(false);
+        estado.setLayout(new BoxLayout(estado, BoxLayout.Y_AXIS));
+        estado.add(izq(lblSemaforoTitulo));
+        estado.add(izq(lblSemaforoDetalle));
         semaforo.setMaximumSize(semaforo.getPreferredSize());
-        cSemaforo.add(izq(semaforo));
-        cSemaforo.add(Box.createVerticalStrut(6));
-        cSemaforo.add(izq(lblSemaforoTitulo));
-        cSemaforo.add(izq(lblSemaforoDetalle));
-        fila.add(cSemaforo);
+        JPanel luces = new JPanel(new BorderLayout());
+        luces.setOpaque(false);
+        luces.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 0, 4, 0));
+        luces.add(semaforo, BorderLayout.WEST);
+        luces.setMaximumSize(new Dimension(Integer.MAX_VALUE, 54));
+        fila.add(tarjetaDato("SEMÁFORO DE STOCK", null, luces, estado));
 
-        PanelRedondeado cLlamadas = tarjeta();
-        cLlamadas.setLayout(new BoxLayout(cLlamadas, BoxLayout.Y_AXIS));
-        cLlamadas.add(izq(etiqueta("LLAMADAS RECURSIVAS", 11, Font.BOLD, TEXTO_SEC)));
-        cLlamadas.add(Box.createVerticalStrut(6));
-        cLlamadas.add(izq(lblLlamadas));
-        cLlamadas.add(izq(lblLlamadasSub));
-        fila.add(cLlamadas);
+        fila.add(tarjetaDato("LLAMADAS RECURSIVAS", "#", alto(lblLlamadas), lblLlamadasSub));
         return fila;
     }
 
-    private JComponent crearPanelArbol() {
-        PanelRedondeado t = tarjeta();
-        t.setLayout(new BorderLayout(0, 12));
+    private JComponent crearPestanas() {
+        pestanas = new PanelPestanas();
+        pestanas.agregar("Árbol de llamadas", " ",
+                PanelPestanas.marco(ScrollModerno.envolver(arbol)),
+                filaLeyendas(AZUL_OSCURO, "Llamada inicial", AZUL, "Recursiva", AZUL_SUAVE, "Caso base"));
 
-        JPanel cabecera = new JPanel(new BorderLayout());
-        cabecera.setOpaque(false);
-        JPanel textos = new JPanel();
-        textos.setOpaque(false);
-        textos.setLayout(new BoxLayout(textos, BoxLayout.Y_AXIS));
-        textos.add(izq(etiqueta("Árbol de llamadas recursivas", 16, Font.BOLD, TEXTO)));
-        lblFormula.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
-        textos.add(izq(lblFormula));
-        cabecera.add(textos, BorderLayout.WEST);
-
-        JPanel ley = new JPanel(new FlowLayout(FlowLayout.RIGHT, 14, 4));
-        ley.setOpaque(false);
-        ley.add(leyenda(AZUL_OSCURO, "Llamada inicial"));
-        ley.add(leyenda(AZUL, "Recursiva"));
-        ley.add(leyenda(AZUL_SUAVE, "Caso base"));
-        cabecera.add(ley, BorderLayout.EAST);
-        t.add(cabecera, BorderLayout.NORTH);
-
-        JScrollPane scroll = new JScrollPane(arbol);
-        scroll.setBorder(BorderFactory.createLineBorder(BORDE));
-        scroll.getViewport().setBackground(Color.WHITE);
-        scroll.getHorizontalScrollBar().setUnitIncrement(24);
-        scroll.getVerticalScrollBar().setUnitIncrement(24);
-        t.add(scroll, BorderLayout.CENTER);
-        return t;
+        VisorCodigo codigo = new VisorCodigo();
+        codigo.mostrarCodigo(CODIGO);
+        pestanas.agregar("Código Java", "Método recursivo",
+                PanelPestanas.marco(ScrollModerno.envolver(codigo)),
+                PanelGuardias.chips("Casos base: semana 1 y 2", "Tiempo: O(2^n)", "Memoria de pila: O(n)"));
+        return pestanas;
     }
 
     private void calcular() {
-        int semana = (Integer) spSemana.getValue();
-        long stock = ((Number) spStock.getValue()).longValue();
+        int semana = campoSemana.getValor();
+        long stock = campoStock.getValor();
 
         DemandaSangre.Resultado r = DemandaSangre.calcular(semana);
         DemandaSangre.Semaforo estado = DemandaSangre.evaluarStock(r.unidades(), stock);
@@ -211,7 +194,7 @@ public class PanelBancoSangre extends JPanel {
         lblLlamadas.setText(String.valueOf(r.llamadas()));
         lblLlamadasSub.setText(r.casosBase() + " casos base · profundidad " + r.profundidad());
 
-        lblFormula.setText(formula(r.arbol()) + "      (pasa el mouse sobre un nodo para ver el detalle)");
+        pestanas.setDescripcion(0, formula(r.arbol()));
         arbol.setArbol(r.arbol());
     }
 
@@ -223,5 +206,11 @@ public class PanelBancoSangre extends JPanel {
         DemandaSangre.Nodo b = n.getHijos().get(1);
         return "D(" + n.getSemana() + ") = D(" + a.getSemana() + ") + D(" + b.getSemana() + ") = "
                 + a.getValor() + " + " + b.getValor() + " = " + n.getValor() + " unidades";
+    }
+
+    private static JLabel alto(JLabel l) {
+        l.setPreferredSize(new Dimension(10, 50));
+        l.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        return l;
     }
 }

@@ -54,6 +54,7 @@ public class ItemMenu extends javax.swing.JComponent {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                requestFocusInWindow();   // el foco pasa a la opción elegida (no se queda en la anterior)
                 accion.run();
             }
         });
@@ -79,6 +80,12 @@ public class ItemMenu extends javax.swing.JComponent {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(220, 58);
+    }
+
+    /** Sin esto BoxLayout puede aplastar la opción cuando falta altura (Salir salía cortado). */
+    @Override
+    public Dimension getMinimumSize() {
+        return new Dimension(0, 58);
     }
 
     @Override
