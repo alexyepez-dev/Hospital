@@ -13,8 +13,12 @@ import java.util.List;
  */
 public class VistaBusqueda extends VistaModulo {
 
+    /** Búsqueda Binaria: Archivo de Historias (se reutiliza para no perder la búsqueda al cambiar de opción). */
+    private PanelBusquedaBinaria panelBinaria;
+
     public VistaBusqueda(String usuario) {
         super(usuario, "Búsqueda", new Color(230, 126, 34));
+        Componentes.Estilo.agrandarVentana(this, 1440, 800);
         initModulo();
     }
 
@@ -25,6 +29,12 @@ public class VistaBusqueda extends VistaModulo {
 
     @Override
     protected JPanel crearPanelOpcion(int indice) {
+        if (indice == 0) {
+            if (panelBinaria == null) {
+                panelBinaria = new PanelBusquedaBinaria();
+            }
+            return panelBinaria;
+        }
         String opcion = getOpcionesMenu().get(indice);
         return panelPendiente(opcion);
     }
