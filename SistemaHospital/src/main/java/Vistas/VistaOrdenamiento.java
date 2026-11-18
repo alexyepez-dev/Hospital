@@ -1,10 +1,21 @@
 package Vistas; 
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import Logica.OrdenamientoLogica;
 import Models.OrdenamientoModel;
@@ -12,7 +23,7 @@ import Models.OrdenamientoModel;
 /**
  * Vista del módulo ORDENAMIENTO.
  * Implementados: Método Burbuja y Método Selección.
- * Pendientes para: Método Inserción y Método Quicksort.
+ * Implementados: Método Inserción y Método Quicksort.
  *
  * @author CRACKS
  */
@@ -37,8 +48,13 @@ public class VistaOrdenamiento extends VistaModulo {
                 return panelBurbuja();
             case 1:
                 return panelSeleccion();
+
+            case 2:
+                return panelInsercion();
+            case 3:
+                return panelQuickSort();
+            
             default:
-                // Espacio libre para Método Inserción (2) y Método Quicksort (3)
                 String opcion = getOpcionesMenu().get(indice);
                 return panelPendiente(opcion);
         }
@@ -144,6 +160,132 @@ public class VistaOrdenamiento extends VistaModulo {
         return p;
     }
 
+    
+    
+    
+    private JPanel panelInsercion() {
+        JPanel p = new JPanel();
+        p.setOpaque(false);
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+
+        p.add(crearTitulo("Método Inserción"));
+        p.add(Box.createRigidArea(new Dimension(0, 6)));
+        p.add(crearSubtitulo("Ordena tiempos de espera de pacientes de menor a mayor"));
+        p.add(Box.createRigidArea(new Dimension(0, 30)));
+
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        fila.setOpaque(false);
+
+        JTextField txt = crearCampoTexto(20);
+        txt.setText("35, 10, 25, 5, 20");
+
+        JButton btnOrdenar = crearBotonPrimario("Ordenar");
+        JButton btnEjemplo = crearBotonPrimario("Ejemplo");
+
+        fila.add(new JLabel("Tiempos de espera (separados por coma):"));
+        fila.add(txt);
+        fila.add(btnOrdenar);
+        fila.add(btnEjemplo);
+        p.add(fila);
+
+        JTextArea resultado = new JTextArea(12, 50);
+        resultado.setEditable(false);
+        resultado.setFont(new Font("Consolas", Font.PLAIN, 13));
+        resultado.setBackground(new Color(245, 248, 252));
+        resultado.setBorder(new EmptyBorder(15, 15, 15, 15));
+
+        p.add(Box.createRigidArea(new Dimension(0, 20)));
+        p.add(new JScrollPane(resultado));
+
+        btnOrdenar.addActionListener(e -> {
+            int[] datos = logica.parsearArreglo(txt.getText());
+
+            if (datos == null) {
+                resultado.setText("Ingresa entre 2 y 20 números enteros válidos separados por coma.");
+            } else {
+                Logica.OrdenamientoExtraLogica logicaExtra =
+                        new Logica.OrdenamientoExtraLogica();
+
+                OrdenamientoModel r = logicaExtra.ordenarInsercion(datos);
+
+                resultado.setText(r.getTraza());
+                resultado.setCaretPosition(0);
+            }
+        });
+
+        btnEjemplo.addActionListener(e -> {
+            txt.setText("40, 15, 30, 5, 25");
+            btnOrdenar.doClick();
+        });
+
+        return p;
+    }
+    
+    
+    
+    private JPanel panelQuickSort() {
+        JPanel p = new JPanel();
+        p.setOpaque(false);
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+
+        p.add(crearTitulo("Método Quicksort"));
+        p.add(Box.createRigidArea(new Dimension(0, 6)));
+        p.add(crearSubtitulo("Ordena números de turnos médicos utilizando el algoritmo Quicksort"));
+        p.add(Box.createRigidArea(new Dimension(0, 30)));
+
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        fila.setOpaque(false);
+
+        JTextField txt = crearCampoTexto(20);
+        txt.setText("108, 103, 115, 101, 110");
+
+        JButton btnOrdenar = crearBotonPrimario("Ordenar");
+        JButton btnEjemplo = crearBotonPrimario("Ejemplo");
+
+        fila.add(new JLabel("N° Turnos médicos(separados por coma):"));
+        fila.add(txt);
+        fila.add(btnOrdenar);
+        fila.add(btnEjemplo);
+        p.add(fila);
+
+        JTextArea resultado = new JTextArea(12, 50);
+        resultado.setEditable(false);
+        resultado.setFont(new Font("Consolas", Font.PLAIN, 13));
+        resultado.setBackground(new Color(245, 248, 252));
+        resultado.setBorder(new EmptyBorder(15, 15, 15, 15));
+
+        p.add(Box.createRigidArea(new Dimension(0, 20)));
+        p.add(new JScrollPane(resultado));
+
+        btnOrdenar.addActionListener(e -> {
+            int[] datos = logica.parsearArreglo(txt.getText());
+
+            if (datos == null) {
+                resultado.setText("⚠ Ingresa entre 2 y 20 números enteros válidos separados por coma.");
+            } else {
+                Logica.OrdenamientoExtraLogica logicaExtra =
+                        new Logica.OrdenamientoExtraLogica();
+
+                OrdenamientoModel r = logicaExtra.ordenarQuickSort(datos);
+
+                resultado.setText(r.getTraza());
+                resultado.setCaretPosition(0);
+            }
+        });
+
+        btnEjemplo.addActionListener(e -> {
+            txt.setText("120, 105, 118, 101, 112");
+            btnOrdenar.doClick();
+        });
+
+        return p;
+    }
+
+
+    
+    
+    
+    //--------------------------------------------------------------------------------------
     /**
      * Panel vacío con un mensaje de "sección pendiente".
      */
@@ -158,4 +300,6 @@ public class VistaOrdenamiento extends VistaModulo {
         p.add(Box.createVerticalGlue());
         return p;
     }
+    
+    
 }
