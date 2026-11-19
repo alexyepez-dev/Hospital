@@ -28,6 +28,11 @@ public final class BusquedaModel {
         }
     }
 
+    /** Campo por el que filtra la búsqueda secuencial. */
+    public enum Campo {
+        NOMBRE, AREA
+    }
+
     /** Resultado de una búsqueda: filas encontradas y cuántos registros se revisaron. */
     public record Hallazgo(List<Integer> filas, int revisados) {
     }

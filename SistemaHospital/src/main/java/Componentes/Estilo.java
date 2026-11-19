@@ -24,7 +24,6 @@ public final class Estilo {
     public static final Color AZUL_CLARO = new Color(0x7DB4F0);
     public static final Color AZUL_OSCURO = new Color(0x2F6FB8);
     public static final Color AZUL_SUAVE = new Color(0xEAF3FC);
-    public static final Color FONDO = new Color(0xF2F7FD);
     public static final Color BORDE = new Color(0xDCE8F6);
     public static final Color TEXTO = new Color(0x1F2D3D);
     public static final Color TEXTO_SEC = new Color(0x6B7C93);
@@ -145,20 +144,10 @@ public final class Estilo {
         b.setText(texto);
         b.setBackground(AZUL);
         b.setFont(fuente(Font.BOLD, 13));
-        // Margen lateral corto: con Montserrat "Reorganizar Censo por Edad" no cabía en el panel
+        // Margen lateral corto para que los textos largos quepan en el panel izquierdo
         b.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
         b.setPreferredSize(new Dimension(200, 44));
-        return b;
-    }
-
-    /** Botón secundario: fondo azul suave con texto azul oscuro. */
-    public static BotonRedondeado botonSecundario(String texto) {
-        BotonRedondeado b = boton(texto);
-        b.setBackground(new Color(0xE3EEFB));
-        b.setForeground(AZUL_OSCURO);
-        b.setFont(fuente(Font.BOLD, 13));
-        b.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
         return b;
     }
 
@@ -208,24 +197,6 @@ public final class Estilo {
         t.add(norte, BorderLayout.NORTH);
         t.add(marco(ScrollModerno.envolver(tabla)), BorderLayout.CENTER);
         return t;
-    }
-
-    /** Fila horizontal de leyendas (punto de color + texto). */
-    public static JComponent filaLeyendas(Object... colorTexto) {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, 14, 0));
-        p.setOpaque(false);
-        for (int i = 0; i < colorTexto.length; i += 2) {
-            p.add(leyenda((Color) colorTexto[i], (String) colorTexto[i + 1]));
-        }
-        return p;
-    }
-
-    /** Punto de color + texto, para leyendas. */
-    public static JLabel leyenda(Color color, String texto) {
-        JLabel l = etiqueta(texto, 12, Font.PLAIN, TEXTO_SEC);
-        l.setIconTextGap(8);
-        l.setIcon(punto(color, 12, new Color(0xC9DAEE)));
-        return l;
     }
 
     /**

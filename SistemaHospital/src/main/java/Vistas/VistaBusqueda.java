@@ -1,20 +1,22 @@
-package Vistas; 
+package Vistas;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JPanel;
 
 /**
- * Vista del módulo BÚSQUEDA. El contenido de cada opción queda PENDIENTE para
- * que el compañero encargado implemente la lógica (Binaria, Secuencial).
+ * Vista del módulo BÚSQUEDA:
+ *  - Búsqueda Binaria: Archivo de Historias (por número de historia clínica).
+ *  - Búsqueda Secuencial: Consulta en Sala (filtra por nombre o por área).
  *
  * @author CRACKS
  */
 public class VistaBusqueda extends VistaModulo {
 
-    /** Búsqueda Binaria: Archivo de Historias (se reutiliza para no perder la búsqueda al cambiar de opción). */
+    // Los paneles se reutilizan para no perder la búsqueda al cambiar de opción
     private PanelBusquedaBinaria panelBinaria;
+    private PanelBusquedaSecuencial panelSecuencial;
 
     public VistaBusqueda(String usuario) {
         super(usuario, "Búsqueda", new Color(230, 126, 34));
@@ -35,22 +37,9 @@ public class VistaBusqueda extends VistaModulo {
             }
             return panelBinaria;
         }
-        String opcion = getOpcionesMenu().get(indice);
-        return panelPendiente(opcion);
-    }
-
-    /**
-     * Panel vacío con un mensaje de "sección pendiente".
-     */
-    private JPanel panelPendiente(String nombreOpcion) {
-        JPanel p = new JPanel();
-        p.setOpaque(false);
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-
-        p.add(crearTitulo(nombreOpcion));
-        p.add(Box.createRigidArea(new Dimension(0, 6)));
-        p.add(crearSubtitulo("Aquí irá la lógica del módulo Búsqueda → " + nombreOpcion));
-        p.add(Box.createVerticalGlue());
-        return p;
+        if (panelSecuencial == null) {
+            panelSecuencial = new PanelBusquedaSecuencial();
+        }
+        return panelSecuencial;
     }
 }
