@@ -15,7 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/** Campo de texto con el mismo aspecto que CampoNumero (borde redondeado y anillo de foco). */
+/** Campo de texto con borde redondeado, anillo de foco y texto de ayuda cuando está vacío. */
 public class CampoTexto extends JPanel {
 
     private final JTextField texto = new JTextField();
@@ -74,6 +74,25 @@ public class CampoTexto extends JPanel {
     /** Se ejecuta al presionar Enter dentro del campo. */
     public void alPresionarEnter(ActionListener l) {
         texto.addActionListener(l);
+    }
+
+    /** Se ejecuta cada vez que cambia el texto (al escribir o borrar). */
+    public void alCambiarTexto(Runnable accion) {
+        texto.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                accion.run();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                accion.run();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            }
+        });
     }
 
     public void enfocar() {

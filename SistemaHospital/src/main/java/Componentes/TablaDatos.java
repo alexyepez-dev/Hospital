@@ -26,9 +26,8 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
 /**
- * Tabla de solo lectura con el mismo estilo que TablaPacientes: filas
- * alternadas, cabecera en mayúsculas y columnas opcionales con "píldora" de color
- * (por ejemplo, el estado del stock).
+ * Tabla de solo lectura: filas alternadas, cabecera en mayúsculas y columnas
+ * opcionales con "píldora" de color (por ejemplo, el nivel de triaje).
  */
 public class TablaDatos extends JTable {
 
@@ -134,7 +133,7 @@ public class TablaDatos extends JTable {
         }
     }
 
-    /** Píldora de color + texto, como la del triaje en TablaPacientes. */
+    /** Píldora de color + texto (punto de color, fondo suave y texto en negrita). */
     private static final class Pildora extends JPanel {
 
         String texto = "";
