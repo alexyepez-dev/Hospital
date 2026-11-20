@@ -159,6 +159,13 @@ public abstract class VistaModulo extends JFrame {
     }
     
     public void initModulo() {
+        if ("Ordenamiento".equals(tituloModulo)) {
+            PanelContextoOrdenamiento.instalarEn(this);
+        } else if ("Búsqueda".equals(tituloModulo)) {
+            PanelContextoBusqueda.instalarEn(this);
+        } else if ("Arreglos".equals(tituloModulo)) {
+            PanelContextoArreglos.instalarEn(this);
+        }
         if (!opciones.isEmpty()) {
             seleccionarOpcion(0);
         }
