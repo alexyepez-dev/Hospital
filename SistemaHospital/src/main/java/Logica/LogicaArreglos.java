@@ -298,4 +298,35 @@ public class LogicaArreglos {
     public int getEspaciosDisponibles() {
         return MAX - cantidadActual;
     }
+
+    /**
+     * Retorna una representación en texto del estado actual del arreglo en memoria.
+     * Ejemplo: "[PAC-001, PAC-002, PAC-003, null, null, ...]"
+     * @return Cadena que representa el vector estático completo.
+     */
+    public String getEstadoMemoria() {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < MAX; i++) {
+            if (i < cantidadActual && arreglo[i] != null) {
+                sb.append(arreglo[i]);
+            } else {
+                sb.append("null");
+            }
+            if (i < MAX - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    /**
+     * Retorna una copia de todos los slots del arreglo (tamaño estático MAX).
+     * @return Vector de tamaño MAX con elementos y posiciones null.
+     */
+    public String[] getArregloCopiaCompleta() {
+        String[] copia = new String[MAX];
+        System.arraycopy(arreglo, 0, copia, 0, MAX);
+        return copia;
+    }
 }
