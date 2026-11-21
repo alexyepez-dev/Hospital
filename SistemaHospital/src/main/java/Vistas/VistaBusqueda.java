@@ -1,4 +1,4 @@
-package Vistas; 
+package Vistas;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,12 +9,16 @@ import java.util.List;
  * Vista del módulo BÚSQUEDA. El contenido de cada opción queda PENDIENTE para
  * que el compañero encargado implemente la lógica (Binaria, Secuencial).
  *
- * @author CRACKS
+ * @author Justin Bajaña
  */
 public class VistaBusqueda extends VistaModulo {
 
-    /** Búsqueda Binaria: Archivo de Historias (se reutiliza para no perder la búsqueda al cambiar de opción). */
+    /**
+     * Búsqueda Binaria: Archivo de Historias (se reutiliza para no perder la
+     * búsqueda al cambiar de opción).
+     */
     private PanelBusquedaBinaria panelBinaria;
+    private PanelPruebaEscritorio panelPrueba;
 
     public VistaBusqueda(String usuario) {
         super(usuario, "Búsqueda", new Color(230, 126, 34));
@@ -24,7 +28,7 @@ public class VistaBusqueda extends VistaModulo {
 
     @Override
     protected List<String> getOpcionesMenu() {
-        return Arrays.asList("Búsqueda Binaria", "Búsqueda Secuencial");
+        return Arrays.asList("Búsqueda Binaria", "Búsqueda Secuencial", "Prueba de Escritorio");
     }
 
     @Override
@@ -34,6 +38,12 @@ public class VistaBusqueda extends VistaModulo {
                 panelBinaria = new PanelBusquedaBinaria();
             }
             return panelBinaria;
+        }
+        if (indice == 2) {
+            if (panelPrueba == null) {
+                panelPrueba = new PanelPruebaEscritorio();
+            }
+            return panelPrueba;
         }
         String opcion = getOpcionesMenu().get(indice);
         return panelPendiente(opcion);
