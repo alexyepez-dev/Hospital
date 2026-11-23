@@ -10,7 +10,9 @@ import Logica.RecursividadLogica;
 import Models.RecursividadModel;
 
 /**
- * Vista del módulo RECURSIVIDAD.
+ * Vista del módulo RECURSIVIDAD aplicada al Sistema Hospitalario.
+ *  - Factorial: órdenes de atención posibles en la sala de espera.
+ *  - Fibonacci: proyección de un cultivo bacteriano en el laboratorio.
  * @author CRACKS
  */
 public class VistaRecursividad extends VistaModulo {
@@ -24,7 +26,7 @@ public class VistaRecursividad extends VistaModulo {
 
     @Override
     protected List<String> getOpcionesMenu() {
-        return Arrays.asList("Factorial", "Fibonacci");
+        return Arrays.asList("Factorial: Sala de espera", "Fibonacci: Cultivo de laboratorio");
     }
 
     @Override
@@ -32,30 +34,20 @@ public class VistaRecursividad extends VistaModulo {
         return indice == 0 ? panelFactorial() : panelFibonacci();
     }
 
+    // ---------------------------------------------------------
+    //  FACTORIAL - Órdenes de atención de pacientes
+    // ---------------------------------------------------------
     private JPanel panelFactorial() {
-        JPanel p = new JPanel();
-        p.setOpaque(false);
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        JPanel p = crearBase(
+                "Factorial: órdenes de atención de pacientes",
+                "f(n) = n * f(n-1)   |   Caso base: f(0) = f(1) = 1",
+                "Caso de uso: Emergencias tiene n pacientes en espera. ¿Cuántos órdenes de atención existen?");
 
-        p.add(crearTitulo("Factorial recursivo"));
-        p.add(Box.createRigidArea(new Dimension(0, 6)));
-        p.add(crearSubtitulo("Calcula n! usando recursividad: f(n) = n * f(n-1)"));
-        p.add(Box.createRigidArea(new Dimension(0, 30)));
-
-        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        fila.setOpaque(false);
         JTextField txt = crearCampoTexto(8);
         JButton btn = crearBotonPrimario("Calcular");
-        fila.add(new JLabel("n ="));
-        fila.add(txt);
-        fila.add(btn);
-        p.add(fila);
+        p.add(crearFila("Pacientes en espera =", txt, btn));
 
-        JTextArea resultado = new JTextArea(10, 50);
-        resultado.setEditable(false);
-        resultado.setFont(new Font("Consolas", Font.PLAIN, 13));
-        resultado.setBackground(new Color(245, 248, 252));
-        resultado.setBorder(new EmptyBorder(15, 15, 15, 15));
+        JTextArea resultado = crearAreaResultado();
         p.add(Box.createRigidArea(new Dimension(0, 20)));
         p.add(new JScrollPane(resultado));
 
@@ -63,11 +55,10 @@ public class VistaRecursividad extends VistaModulo {
             try {
                 int n = Integer.parseInt(txt.getText().trim());
                 RecursividadModel r = logica.calcularFactorial(n);
-                if (r == null) {
-                    resultado.setText("⚠ Ingresa un número entre 0 y 20");
-                } else {
-                    resultado.setText(r.getTraza());
-                }
+                resultado.setText(r == null
+                        ? "⚠ Ingresa un número de pacientes entre 0 y 20"
+                        : r.getTraza());
+                resultado.setCaretPosition(0);
             } catch (NumberFormatException ex) {
                 resultado.setText("⚠ Ingresa un número válido");
             }
@@ -76,30 +67,20 @@ public class VistaRecursividad extends VistaModulo {
         return p;
     }
 
+    // ---------------------------------------------------------
+    //  FIBONACCI - Crecimiento de cultivo bacteriano
+    // ---------------------------------------------------------
     private JPanel panelFibonacci() {
-        JPanel p = new JPanel();
-        p.setOpaque(false);
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        JPanel p = crearBase(
+                "Fibonacci: cultivo bacteriano en laboratorio",
+                "f(n) = f(n-1) + f(n-2)   |   Casos base: f(0) = 0, f(1) = 1",
+                "Caso de uso: el laboratorio clínico proyecta el crecimiento de un cultivo día a día.");
 
-        p.add(crearTitulo("Fibonacci recursivo"));
-        p.add(Box.createRigidArea(new Dimension(0, 6)));
-        p.add(crearSubtitulo("Serie de Fibonacci: f(n) = f(n-1) + f(n-2)"));
-        p.add(Box.createRigidArea(new Dimension(0, 30)));
-
-        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        fila.setOpaque(false);
         JTextField txt = crearCampoTexto(8);
-        JButton btn = crearBotonPrimario("Generar");
-        fila.add(new JLabel("n ="));
-        fila.add(txt);
-        fila.add(btn);
-        p.add(fila);
+        JButton btn = crearBotonPrimario("Proyectar");
+        p.add(crearFila("Días de cultivo =", txt, btn));
 
-        JTextArea resultado = new JTextArea(10, 50);
-        resultado.setEditable(false);
-        resultado.setFont(new Font("Consolas", Font.PLAIN, 13));
-        resultado.setBackground(new Color(245, 248, 252));
-        resultado.setBorder(new EmptyBorder(15, 15, 15, 15));
+        JTextArea resultado = crearAreaResultado();
         p.add(Box.createRigidArea(new Dimension(0, 20)));
         p.add(new JScrollPane(resultado));
 
@@ -107,16 +88,50 @@ public class VistaRecursividad extends VistaModulo {
             try {
                 int n = Integer.parseInt(txt.getText().trim());
                 RecursividadModel r = logica.calcularFibonacci(n);
-                if (r == null) {
-                    resultado.setText("⚠ Ingresa un número entre 0 y 30");
-                } else {
-                    resultado.setText(r.getTraza());
-                }
+                resultado.setText(r == null
+                        ? "⚠ Ingresa un número de días entre 0 y 30"
+                        : r.getTraza());
+                resultado.setCaretPosition(0);
             } catch (NumberFormatException ex) {
                 resultado.setText("⚠ Ingresa un número válido");
             }
         });
 
         return p;
+    }
+
+    // ---------------------------------------------------------
+    //  Auxiliares para no repetir código
+    // ---------------------------------------------------------
+    private JPanel crearBase(String titulo, String formula, String casoUso) {
+        JPanel p = new JPanel();
+        p.setOpaque(false);
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+
+        p.add(crearTitulo(titulo));
+        p.add(Box.createRigidArea(new Dimension(0, 6)));
+        p.add(crearSubtitulo(formula));
+        p.add(Box.createRigidArea(new Dimension(0, 4)));
+        p.add(crearSubtitulo(casoUso));
+        p.add(Box.createRigidArea(new Dimension(0, 25)));
+        return p;
+    }
+
+    private JPanel crearFila(String etiqueta, JTextField txt, JButton btn) {
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        fila.setOpaque(false);
+        fila.add(new JLabel(etiqueta));
+        fila.add(txt);
+        fila.add(btn);
+        return fila;
+    }
+
+    private JTextArea crearAreaResultado() {
+        JTextArea area = new JTextArea(16, 50);
+        area.setEditable(false);
+        area.setFont(new Font("Consolas", Font.PLAIN, 13));
+        area.setBackground(new Color(245, 248, 252));
+        area.setBorder(new EmptyBorder(15, 15, 15, 15));
+        return area;
     }
 }
